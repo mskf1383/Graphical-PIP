@@ -5,6 +5,7 @@ from sys import argv
 from os import system
 
 
+# The Main Window class
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -12,10 +13,13 @@ class MainWindow(QMainWindow):
         self.GUI()
 
     
+    # The Graphical User Interface
     def GUI(self):
         self.setWindowTitle("Graphical PIP")
         self.setWindowIcon(QIcon("icon.ico"))
         self.setFixedSize(400, 110)
+
+        # Styling
         self.setStyleSheet("""
             QMainWindow {
                 background: #f7f7f4;
@@ -54,12 +58,14 @@ class MainWindow(QMainWindow):
             }
         """)
         
+        # Get the package name
         self.pypi_name = QLineEdit(self)
         self.pypi_name.move(10, 10)
         self.pypi_name.setFixedSize(300, 50)
         self.pypi_name.setPlaceholderText("Enter the package name")
 
 
+        # Run button
         self.run = QPushButton("Run", self)
         self.run.move(320, 10)
         self.run.setFixedSize(70, 50)
@@ -83,22 +89,26 @@ class MainWindow(QMainWindow):
             """)
 
 
+        # Install Radio button
         self.install = QRadioButton("Install", self)
         self.install.move(10, 70)
         self.install.toggle()
         self.install.toggled.connect(lambda x: self.selected_action("install"))
 
+        # Uninstall radio button
         self.uninstall = QRadioButton("Uninstall", self)
         self.uninstall.move(100, 70)
         self.uninstall.toggled.connect(lambda x: self.selected_action("uninstall"))
 
+        # Update radio button
         self.update = QRadioButton("Update", self)
         self.update.move(190, 70)
         self.update.toggled.connect(lambda x: self.selected_action("update"))
 
 
-    
     @pyqtSlot()
+
+    # Recognize selected action with radio buttons
     def selected_action(self, action):
         if action == "install":
             self.action = "install"
@@ -110,7 +120,10 @@ class MainWindow(QMainWindow):
             self.action = "install --upgrade"
 
     
+    # When the run button pressed
     def run_pressed(self):
+
+        # If name don't give
         if self.pypi_name.text() == "":
             QMessageBox.warning(self, "Warning!", "Eanter the package name!", QMessageBox.Ok, QMessageBox.Ok)
         
@@ -118,6 +131,7 @@ class MainWindow(QMainWindow):
             system("pip" + " " + self.action + " " + self.pypi_name.text())
         
 
+# Run the application
 app = QApplication(argv)
 window = MainWindow()
 window.show()
